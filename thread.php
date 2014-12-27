@@ -6,10 +6,6 @@
 	<meta charset="iso-8859-1"/>
     </head>
     <body>
-	<header> 
-	</header>
-	<nav> 
-	</nav>
 	<div class="results"> 
 	    <section id="content"> 
 		<br/>
@@ -23,6 +19,18 @@
 		$id = $_GET['id'];
 		echo renderThread($id);
 		?>
+		<form action="newMessagePost.php" method="POST">
+		    <?php
+		    $id = $_GET['id'];
+		    echo "<input type=\"hidden\" name=\"id\" value=\"$id\"/>";
+		    ?>
+		    <center><strong>Responder:</strong></center><br/>
+		    <br/>
+		    <center><textarea name="message" style="width:90%;border:none;" rows="12"></textarea></center>
+		    <br/><br/>
+		    <center><input type="submit" style="width:30%" value="Enviar"></center>
+		    <br/>
+		</form> 
 	    </section> 
 	</div>
 	<footer> 

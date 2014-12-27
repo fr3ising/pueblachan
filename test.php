@@ -6,10 +6,6 @@
 	<meta charset="iso-8859-1"/>
     </head>
     <body>
-	<header> 
-	</header>
-	<nav> 
-	</nav>
 	<div class="results"> 
 	    <section id="content"> 
 		<br/>

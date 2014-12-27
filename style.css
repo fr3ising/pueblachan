@@ -50,7 +50,9 @@ table {
 
 body {
     font-family: 'Arial', sans-serif;
-    background: url("waifu.jpg") no-repeat fixed center;;
+    background: url("waifu.jpg");
+    background-repeat:no-repeat;
+    background-position: center top;
     font-size: 14px;
 }
 

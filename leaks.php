@@ -7,9 +7,26 @@ function renderThreadShort($id)
     $title = utf8_decode($xml->title);
     $date = date("d-m-Y H:i:s",$id);
     $src = <<< EOF
-    <div class="threadShort">
-    <div class="threadShortTitle"><strong>$date <a href="./thread.php?id=$id">$title</a></strong></div>
+    <div class="threadShort" style="margin: 10 10 10 10;width:90%;">
+    <div class="threadShortTitle"><strong><a href="./thread.php?id=$id">$title</a></strong>
+    <br/><br/><p align="right" style="color:#444444;">$date</p><br/></div>
     </div>
+EOF;
+    return $src;
+}
+
+function renderMessage($id,$mid)
+{
+    $src = "";
+    $xml=simplexml_load_file("db/$id/$mid.xml");
+    $message = utf8_decode($xml->message);
+    $date = date("d-m-Y H:i:s",$mid);
+    $src = <<< EOF
+    <br/>
+    <br/>
+    <div class="threadMessage">$message
+    <br/><br/><p align="right" style="color:#444444;">$date</p><br/></div>
+    <br/>
 EOF;
     return $src;
 }
@@ -21,11 +38,22 @@ function renderThread($id)
     $title = utf8_decode($xml->title);
     $message = utf8_decode($xml->message);
     $date = date("d-m-Y H:i:s",$id);
+    $replies = "";
+    $files = glob("db/$id/*.xml");
+    foreach ($files as $file) {
+	$mid = basename($file,".xml");
+	if ( $mid != $id ) {
+	    $replies .= renderMessage($id,$mid);
+	    $replies .= "<br/>";
+	}
+    }
     $src = <<< EOF
-    <div class="thread">
-    <div class="threadTitle"><strong><h1>$date $title</h1></strong></div>
+    <div class="thread" style="margin: 10 10 10 10;width:90%;">
+    <div class="threadTitle"><strong><a href="./thread.php?id=$id">$title</a></strong></div>
     <br/>
-    <div class="threadMessage">$message</div>
+    <div class="threadMessage">$message
+    <br/><br/><p align="right" style="color:#444444;">$date</p><br/></div>
+    $replies
     <br/>
     </div>
 EOF;
@@ -61,6 +89,15 @@ function getNewThreadId()
     return $id;
 }
 
+function getNewMessageId($id)
+{
+    $mid = time();
+    while ( file_exists("db/".$id."/".$mid.".xml") ) {
+	$mid++;
+    }
+    return $mid;
+}
+
 function xmlCompose($title,$message)
 {
     $xml = <<< EOF
@@ -83,6 +120,17 @@ function postNewThread($title,$message)
     fwrite($file,xmlCompose($title,$message));
     fclose($file);
     header('Location: '. "./test.php");
+    exit(0);
+}
+
+function postNewMessage($id,$message)
+{
+    $mid = getNewMessageId($id);
+    $message = htmlspecialchars($message);
+    $file = fopen("db/$id/$mid.xml","w");
+    fwrite($file,xmlCompose("",$message));
+    fclose($file);
+    header('Location: '. "./thread.php?id=$id");
     exit(0);
 }
 

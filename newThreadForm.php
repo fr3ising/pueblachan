@@ -6,10 +6,6 @@
 	<meta charset="iso-8859-1"/>
     </head>
     <body>
-	<header> 
-	</header>
-	<nav> 
-	</nav>
 	<div class="results"> 
 	    <section id="content"> 
 		<br/>
@@ -20,7 +16,8 @@
 		    <center><strong>Mensaje:</strong></center><br/>
 		    <center><textarea name="message" style="width:90%;border:none;" rows="30"></textarea></center>
 		    <br/><br/>
-		    <center><input type="submit" style="width:90%" value="Enviar"></center>
+		    <center><input type="submit" style="width:30%" value="Enviar"></center>
+		    <br/>
 		</form> 
 	    </section>
 	</div>
