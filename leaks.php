@@ -148,7 +148,7 @@ function postNewThread($title,$message,$upload)
     if ( strlen(trim($title)) == 0 ) {
 	$title = substr($message,0,16) . " ...";
     }
-    if ( strlen(trim($message)) == 0 ) {
+    if ( strlen(trim($title)) == 0 ) {
 	header('Location: '. "./test.php");
 	exit(0);
     }
