@@ -41,10 +41,20 @@ function renderMessage($id,$mid)
     $xml=simplexml_load_file("db/$id/$mid.xml");
     $message = utf8_decode($xml->message);
     $date = date("d-m-Y H:i:s",$mid);
+    $img = "";
+    if ( file_exists("db/$id/$mid.jpg") ) {
+      $img = "<img src=\"db/$id/$mid.jpg\" style=\"width:80%\"/>\n";
+    }
+    if ( file_exists("db/$id/$mid.gif") ) {
+      $img = "<img src=\"db/$id/$mid.gif\" style=\"width:80%\"/>\n";
+    }
+    if ( file_exists("db/$id/$mid.png") ) {
+      $img = "<img src=\"db/$id/$mid.png\" style=\"width:80%\"/>\n";
+    }
     $src = <<< EOF
     <br/>
     <br/>
-    <div class="threadMessage">$message
+    <div class="threadMessage">$message <br/><br/> $img
     <br/><br/><p align="right" style="color:#444444;">$date</p><br/></div>
     <br/>
 EOF;
@@ -67,11 +77,22 @@ function renderThread($id)
 	    $replies .= "<br/>";
 	}
     }
+    $img = "";
+    if ( file_exists("db/$id/$id.jpg") ) {
+      $img = "<img src=\"db/$id/$id.jpg\" style=\"width:80%\"/>\n";
+    }
+    if ( file_exists("db/$id/$id.gif") ) {
+      $img = "<img src=\"db/$id/$id.gif\" style=\"width:80%\"/>\n";
+    }
+    if ( file_exists("db/$id/$id.png") ) {
+      $img = "<img src=\"db/$id/$id.png\" style=\"width:80%\"/>\n";
+    }
+
     $src = <<< EOF
     <div class="thread" style="margin: 10 10 10 10;width:90%;">
     <div class="threadTitle"><strong><a href="./thread.php?id=$id">$title</a></strong></div>
     <br/>
-    <div class="threadMessage">$message
+    <div class="threadMessage">$message <br/><br/> $img
     <br/><br/><p align="right" style="color:#444444;">$date</p><br/></div>
     $replies
     <br/>
@@ -119,7 +140,7 @@ EOF;
     return $xml;
 }
 
-function postNewThread($title,$message)
+function postNewThread($title,$message,$upload)
 {
     $id = getNewThreadId();
     $title = htmlspecialchars($title);
@@ -135,17 +156,29 @@ function postNewThread($title,$message)
     $file = fopen("db/$id/$id.xml","w");
     fwrite($file,xmlCompose($title,$message));
     fclose($file);
-    header('Location: '. "./test.php");
+    if ( $upload ) {
+	$target_dir = "db/$id/";
+	$info = new SplFileInfo(basename($upload["name"]));
+	$target_file = $target_dir . $id . "." . $info->getExtension();
+	move_uploaded_file($upload["tmp_name"],$target_file);
+    }
+    header('Location: '. "./thread.php?id=$id");
     exit(0);
 }
 
-function postNewMessage($id,$message)
+function postNewMessage($id,$message,$upload)
 {
     $mid = getNewMessageId($id);
     $message = htmlspecialchars($message);
     $file = fopen("db/$id/$mid.xml","w");
     fwrite($file,xmlCompose("",$message));
     fclose($file);
+    if ( $upload ) {
+	$target_dir = "db/$id/";
+	$info = new SplFileInfo(basename($upload["name"]));
+	$target_file = $target_dir . $mid . "." . $info->getExtension();
+	move_uploaded_file($upload["tmp_name"],$target_file);
+    }
     header('Location: '. "./thread.php?id=$id");
     exit(0);
 }

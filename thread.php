@@ -19,7 +19,7 @@
 		$id = $_GET['id'];
 		echo renderThread($id);
 		?>
-		<form action="newMessagePost.php" method="POST">
+		<form action="newMessagePost.php" enctype="multipart/form-data" method="POST">
 		    <?php
 		    $id = $_GET['id'];
 		    echo "<input type=\"hidden\" name=\"id\" value=\"$id\"/>";
@@ -27,8 +27,11 @@
 		    <center><strong>Responder:</strong></center><br/>
 		    <br/>
 		    <center><textarea name="message" style="width:90%;border:none;" rows="12"></textarea></center>
+		    <center>
+			<input id="file" type="file" name="file" style="width:90%;""></input>
+		    </center>
 		    <br/><br/>
-		    <center><input type="submit" style="width:30%" value="Enviar"></center>
+		    <center><input type="submit" style="width:70%;height:40px;" value="Enviar"></center>
 		    <br/>
 		</form> 
 	    </section> 

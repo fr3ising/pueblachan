@@ -9,14 +9,17 @@
 	<div class="results"> 
 	    <section id="content"> 
 		<br/>
-		<form action="newThreadPost.php" method="POST">
+		<form action="newThreadPost.php" enctype="multipart/form-data" method="POST">
 		    <center><strong>Título del tema:</strong></center><br/>
 		    <center><input type="text" style="width:90%;border:none;" name="title" value=""></center>
 		    <br/><br/>
 		    <center><strong>Mensaje:</strong></center><br/>
 		    <center><textarea name="message" style="width:90%;border:none;" rows="30"></textarea></center>
+		    <center>
+			<input id="file" type="file" name="file" style="width:90%;""></input>
+		    </center>
 		    <br/><br/>
-		    <center><input type="submit" style="width:30%" value="Enviar"></center>
+		    <center><input type="submit" style="width:70%;height:40px;" value="Enviar"></center>
 		    <br/>
 		</form> 
 	    </section>
