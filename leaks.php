@@ -1,11 +1,11 @@
 <?php
 
-function renderThreadShort($id)
+function renderThreadShort($id,$mid)
 {
     $src = "";
     $xml=simplexml_load_file("db/$id/$id.xml");
     $title = utf8_decode($xml->title);
-    $date = date("d-m-Y H:i:s",$id);
+    $date = date("d-m-Y H:i:s",$mid);
     $src = <<< EOF
     <div class="threadShort" style="margin: 10 10 10 10;width:90%;">
     <div class="threadShortTitle"><strong><a href="./thread.php?id=$id">$title</a></strong>
@@ -13,6 +13,26 @@ function renderThreadShort($id)
     </div>
 EOF;
     return $src;
+}
+
+function renderAllThreadsShort()
+{
+    $files = glob("db/*");
+    $lastMessage = array();
+    foreach ( $files as $file ) {
+	if ( is_dir($file) ) {
+	    $msgs = glob("$file/*.xml");
+	    $ar = array_reverse($msgs);
+	    $lastMessage[basename($ar[0],".xml")] = $file;
+	}
+    }
+    krsort($lastMessage);
+    foreach ($lastMessage as $key => $file) {
+	if ( is_dir($file) ) {
+	    echo renderThreadShort(basename($file),basename($key,".xml"));
+	    echo "<br/>";
+	}
+    }
 }
 
 function renderMessage($id,$mid)
@@ -60,17 +80,6 @@ EOF;
     return $src;
 }
 
-function renderAllThreadsShort()
-{
-    $files = glob("db/*");
-    foreach (array_reverse($files) as $file) {
-	if ( is_dir($file) ) {
-	    echo renderThreadShort(basename($file));
-	    echo "<br/>";
-	}
-    }
-}
-
 function clearThreads($dir)
 {
     $files = glob("$dir/*");
@@ -113,9 +122,16 @@ EOF;
 function postNewThread($title,$message)
 {
     $id = getNewThreadId();
-    mkdir("db/".$id);
     $title = htmlspecialchars($title);
     $message = htmlspecialchars($message);
+    if ( strlen(trim($title)) == 0 ) {
+	$title = substr($message,0,16) . " ...";
+    }
+    if ( strlen(trim($message)) == 0 ) {
+	header('Location: '. "./test.php");
+	exit(0);
+    }
+    mkdir("db/".$id);
     $file = fopen("db/$id/$id.xml","w");
     fwrite($file,xmlCompose($title,$message));
     fclose($file);
