@@ -14,7 +14,7 @@
 		    <center><input type="text" style="width:90%;border:none;" name="title" value=""></center>
 		    <br/><br/>
 		    <center><strong>Mensaje:</strong></center><br/>
-		    <center><textarea name="message" style="width:90%;border:none;" rows="30"></textarea></center>
+		    <center><textarea name="message" style="width:90%;border:none;" rows="12"></textarea></center>
 		    <center>
 			<input id="file" type="file" name="file" style="width:90%;""></input>
 		    </center>
