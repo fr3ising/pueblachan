@@ -8,6 +8,8 @@ foreach my $arg ( @ARGV ) {
   $name .= " $arg";
 }
 
+system("git add README.md\n");
+system("git add LICENSE.txt\n");
 system("git add *.php\n");
 system("git add *.pl\n");
 system("git add *.css\n");
